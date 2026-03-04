@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Home Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fa-solid fa-house-signal"></i>
+        <span data-i18n="logo_title">Smart Home</span>
+      </div>
+      <nav class="nav">
+        <button class="nav-item active" data-section="dashboard">
+          <i class="fa-solid fa-grid-2"></i>
+          <span data-i18n="nav_dashboard">Dashboard</span>
+        </button>
+        <button class="nav-item" data-section="lights">
+          <i class="fa-regular fa-lightbulb"></i>
+          <span data-i18n="nav_lights">Lights</span>
+        </button>
+        <button class="nav-item" data-section="climate">
+          <i class="fa-solid fa-temperature-half"></i>
+          <span data-i18n="nav_climate">Climate</span>
+        </button>
+        <button class="nav-item" data-section="security">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span data-i18n="nav_security">Security</span>
+        </button>
+        <button class="nav-item" data-section="cameras">
+          <i class="fa-solid fa-camera-cctv"></i>
+          <span data-i18n="nav_cameras">Cameras</span>
+        </button>
+        <button class="nav-item" data-section="sensors">
+          <i class="fa-solid fa-wave-square"></i>
+          <span data-i18n="nav_sensors">Sensors</span>
+        </button>
+        <button class="nav-item" data-section="automation">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span data-i18n="nav_automation">Automation</span>
+        </button>
+        <button class="nav-item" data-section="settings">
+          <i class="fa-solid fa-gear"></i>
+          <span data-i18n="nav_settings">Settings</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 id="section-title" data-i18n="section_dashboard_title">Dashboard</h1>
+          <span class="subtitle" data-i18n="subtitle_dashboard">Welcome home, everything is under control.</span>
+        </div>
+        <div class="topbar-right">
+          <div class="lang-toggle" id="lang-toggle">
+            <button type="button" data-lang="en" class="active">EN</button>
+            <button type="button" data-lang="ru">RU</button>
+          </div>
+          <div class="notifications">
+            <button class="icon-button" id="notification-toggle">
+              <i class="fa-regular fa-bell"></i>
+              <span class="badge" id="notification-count">3</span>
+            </button>
+            <div class="notification-panel" id="notification-panel">
+              <div class="notification-header">
+                <span data-i18n="notifications_title">Notifications</span>
+                <button id="clear-notifications" data-i18n="notifications_clear">Clear all</button>
+              </div>
+              <div class="notification-list" id="notification-list">
+                <!-- Filled by JS -->
+              </div>
+            </div>
+          </div>
+          <div class="user">
+            <div class="user-info">
+              <span class="user-name">Alex Johnson</span>
+              <span class="user-role" data-i18n="user_role">Home Admin</span>
+            </div>
+            <div class="user-avatar">
+              <span>AJ</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- DASHBOARD SECTION -->
+      <section class="content-section active" id="dashboard-section">
+        <div class="grid grid-dashboard">
+          <!-- Home Status -->
+          <div class="card home-status">
+            <div class="card-header">
+              <h2 data-i18n="card_home_status">Home Status</h2>
+            </div>
+            <div class="home-status-grid">
+              <div class="status-item">
+                <span class="label" data-i18n="label_temperature">Temperature</span>
+                <span class="value"><span id="status-temp">22</span>°C</span>
+              </div>
+              <div class="status-item">
+                <span class="label" data-i18n="label_active_lights">Active Lights</span>
+                <span class="value" id="status-lights">3</span>
+              </div>
+              <div class="status-item">
+                <span class="label" data-i18n="label_door">Door</span>
+                <span class="value" id="status-door">Locked</span>
+              </div>
+              <div class="status-item">
+                <span class="label" data-i18n="label_cameras">Cameras</span>
+                <span class="value" id="status-cameras">3 <span data-i18n="status_cameras_online">Online</span></span>
+              </div>
+              <div class="status-item">
+                <span class="label" data-i18n="label_internet">Internet</span>
+                <span class="value status-pill online" id="status-internet">
+                  <span class="dot"></span> <span data-i18n="status_online">Online</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Climate Panel -->
+          <div class="card climate">
+            <div class="card-header">
+              <h2 data-i18n="card_climate_control">Climate Control</h2>
+            </div>
+            <div class="climate-body">
+              <div class="climate-main">
+                <div class="temperature-display">
+                  <span class="label" data-i18n="label_living_room">Living Room</span>
+                  <div class="temp-value">
+                    <span id="climate-temp">22</span><span class="unit">°C</span>
+                  </div>
+                  <span class="humidity"><span data-i18n="label_humidity">Humidity</span>: <span id="climate-humidity">46</span>%</span>
+                </div>
+                <div class="temp-controls">
+                  <button id="temp-decrease" class="round-button">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                  <button id="temp-increase" class="round-button">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="climate-switches">
+                <div class="switch-row">
+                  <span data-i18n="label_heater">Heater</span>
+                  <label class="switch">
+                    <input type="checkbox" id="heater-switch" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="switch-row">
+                  <span data-i18n="label_ac">AC</span>
+                  <label class="switch">
+                    <input type="checkbox" id="ac-switch" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lighting Control -->
+          <div class="card lighting">
+            <div class="card-header">
+              <h2 data-i18n="card_lighting_control">Lighting Control</h2>
+            </div>
+            <div class="lighting-list">
+              <div class="light-row" data-room="Living Room">
+                <div class="light-info">
+                  <span class="room-name" data-i18n="room_living_room">Living Room</span>
+                  <span class="light-status" data-status>On · 80%</span>
+                </div>
+                <div class="light-controls">
+                  <label class="switch small">
+                    <input type="checkbox" data-light-toggle checked />
+                    <span class="slider"></span>
+                  </label>
+                  <input type="range" min="0" max="100" value="80" data-light-slider />
+                </div>
+              </div>
+              <div class="light-row" data-room="Kitchen">
+                <div class="light-info">
+                  <span class="room-name" data-i18n="room_kitchen">Kitchen</span>
+                  <span class="light-status" data-status>On · 60%</span>
+                </div>
+                <div class="light-controls">
+                  <label class="switch small">
+                    <input type="checkbox" data-light-toggle checked />
+                    <span class="slider"></span>
+                  </label>
+                  <input type="range" min="0" max="100" value="60" data-light-slider />
+                </div>
+              </div>
+              <div class="light-row" data-room="Bedroom">
+                <div class="light-info">
+                  <span class="room-name" data-i18n="room_bedroom">Bedroom</span>
+                  <span class="light-status" data-status>Off</span>
+                </div>
+                <div class="light-controls">
+                  <label class="switch small">
+                    <input type="checkbox" data-light-toggle />
+                    <span class="slider"></span>
+                  </label>
+                  <input type="range" min="0" max="100" value="0" data-light-slider />
+                </div>
+              </div>
+              <div class="light-row" data-room="Bathroom">
+                <div class="light-info">
+                  <span class="room-name" data-i18n="room_bathroom">Bathroom</span>
+                  <span class="light-status" data-status>On · 40%</span>
+                </div>
+                <div class="light-controls">
+                  <label class="switch small">
+                    <input type="checkbox" data-light-toggle checked />
+                    <span class="slider"></span>
+                  </label>
+                  <input type="range" min="0" max="100" value="40" data-light-slider />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security System -->
+          <div class="card security">
+            <div class="card-header">
+              <h2 data-i18n="card_security_system">Security System</h2>
+            </div>
+            <div class="security-body">
+              <div class="security-grid">
+                <div class="security-item">
+                  <span class="label" data-i18n="label_front_door_lock">Front Door Lock</span>
+                  <span class="value" id="front-door-status">Locked</span>
+                  <label class="switch small">
+                    <input type="checkbox" id="front-door-toggle" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="security-item">
+                  <span class="label" data-i18n="label_garage_door">Garage Door</span>
+                  <span class="value" id="garage-status">Closed</span>
+                  <label class="switch small">
+                    <input type="checkbox" id="garage-toggle" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="security-item">
+                  <span class="label" data-i18n="label_alarm_system">Alarm System</span>
+                  <span class="value status-pill armed" id="alarm-status">
+                    <span class="dot"></span> <span data-i18n="alarm_armed">Armed</span>
+                  </span>
+                  <div class="alarm-actions">
+                    <button class="chip-button primary" id="arm-alarm">Arm</button>
+                    <button class="chip-button" id="disarm-alarm" data-i18n="btn_disarm">Disarm</button>
+                  </div>
+                </div>
+                <div class="security-item">
+                  <span class="label" data-i18n="label_motion_detection">Motion Detection</span>
+                  <span class="value status-pill safe" id="motion-status">
+                    <span class="dot"></span> <span data-i18n="motion_none">No Motion</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cameras -->
+          <div class="card cameras">
+            <div class="card-header">
+              <h2 data-i18n="card_live_cameras">Live Camera Feeds</h2>
+            </div>
+            <div class="camera-grid">
+              <div class="camera-tile">
+                <div class="camera-header">
+                  <span data-i18n="camera_front_door">Front Door</span>
+                  <span class="camera-status live"><span class="dot"></span><span data-i18n="camera_live">Live</span></span>
+                </div>
+                <div class="camera-feed">
+                  <div class="camera-overlay" data-i18n="camera_simulated">Simulated Feed</div>
+                </div>
+              </div>
+              <div class="camera-tile">
+                <div class="camera-header">
+                  <span data-i18n="camera_garage">Garage</span>
+                  <span class="camera-status live"><span class="dot"></span><span data-i18n="camera_live">Live</span></span>
+                </div>
+                <div class="camera-feed alt">
+                  <div class="camera-overlay" data-i18n="camera_simulated">Simulated Feed</div>
+                </div>
+              </div>
+              <div class="camera-tile">
+                <div class="camera-header">
+                  <span data-i18n="camera_backyard">Backyard</span>
+                  <span class="camera-status live"><span class="dot"></span><span data-i18n="camera_live">Live</span></span>
+                </div>
+                <div class="camera-feed night">
+                  <div class="camera-overlay" data-i18n="camera_simulated">Simulated Feed</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sensors -->
+          <div class="card sensors">
+            <div class="card-header">
+              <h2 data-i18n="card_sensors_alerts">Sensors & Alerts</h2>
+            </div>
+            <div class="sensor-list">
+              <div class="sensor-item">
+                <div>
+                  <span class="sensor-name" data-i18n="sensor_motion">Motion Sensor</span>
+                  <span class="sensor-location" data-i18n="location_hallway">Hallway</span>
+                </div>
+                <span class="status-pill safe">
+                  <span class="dot"></span> <span data-i18n="status_safe">Safe</span>
+                </span>
+              </div>
+              <div class="sensor-item">
+                <div>
+                  <span class="sensor-name" data-i18n="sensor_smoke">Smoke Detector</span>
+                  <span class="sensor-location" data-i18n="location_kitchen">Kitchen</span>
+                </div>
+                <span class="status-pill safe" id="smoke-status">
+                  <span class="dot"></span> <span data-i18n="status_safe">Safe</span>
+                </span>
+              </div>
+              <div class="sensor-item">
+                <div>
+                  <span class="sensor-name" data-i18n="sensor_water">Water Leak</span>
+                  <span class="sensor-location" data-i18n="location_basement">Basement</span>
+                </div>
+                <span class="status-pill safe" id="water-status">
+                  <span class="dot"></span> <span data-i18n="status_safe">Safe</span>
+                </span>
+              </div>
+              <div class="sensor-item">
+                <div>
+                  <span class="sensor-name" data-i18n="sensor_window">Window Sensor</span>
+                  <span class="sensor-location" data-i18n="location_bedroom">Bedroom</span>
+                </div>
+                <span class="status-pill safe" id="window-status">
+                  <span class="dot"></span> <span data-i18n="status_closed">Closed</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Temperature History -->
+          <div class="card temperature-history">
+            <div class="card-header">
+              <h2 data-i18n="card_temp_history">Temperature History</h2>
+            </div>
+            <div class="chart-container">
+              <canvas id="temp-chart"></canvas>
+              <div class="chart-legend">
+                <span class="legend-dot"></span>
+                <span data-i18n="chart_this_week">This week</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Automation -->
+          <div class="card automation">
+            <div class="card-header">
+              <h2 data-i18n="card_automation_scenarios">Automation Scenarios</h2>
+            </div>
+            <div class="automation-buttons">
+              <button class="automation-btn" data-mode="night">
+                <i class="fa-solid fa-moon"></i>
+                <div>
+                  <span data-i18n="mode_night">Night Mode</span>
+                  <small data-i18n="mode_night_desc">Dim lights, arm security</small>
+                </div>
+              </button>
+              <button class="automation-btn" data-mode="away">
+                <i class="fa-solid fa-person-walking-luggage"></i>
+                <div>
+                  <span data-i18n="mode_away">Away Mode</span>
+                  <small data-i18n="mode_away_desc">Turn off lights, set eco temp</small>
+                </div>
+              </button>
+              <button class="automation-btn" data-mode="vacation">
+                <i class="fa-solid fa-plane-departure"></i>
+                <div>
+                  <span data-i18n="mode_vacation">Vacation Mode</span>
+                  <small data-i18n="mode_vacation_desc">Random lights, max security</small>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LIGHTS SECTION -->
+      <section class="content-section" id="lights-section">
+        <div class="section-header">
+          <h2 data-i18n="lights_section_title">Lighting</h2>
+          <p data-i18n="lights_section_subtitle">Control all smart lights in your home.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 data-i18n="lights_all">All Lights</h2>
+          </div>
+          <div class="lighting-list" id="lights-section-list">
+            <!-- Reused via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- CLIMATE SECTION -->
+      <section class="content-section" id="climate-section">
+        <div class="section-header">
+          <h2 data-i18n="climate_section_title">Climate</h2>
+          <p data-i18n="climate_section_subtitle">Manage temperature and comfort throughout your home.</p>
+        </div>
+        <div class="grid grid-two">
+          <div class="card">
+            <div class="card-header">
+              <h2 data-i18n="climate_overview_title">Climate Overview</h2>
+            </div>
+            <div class="climate-body">
+              <div class="climate-main">
+                <div class="temperature-display">
+                  <span class="label" data-i18n="label_whole_home">Whole Home</span>
+                  <div class="temp-value">
+                    <span id="climate-temp-secondary">22</span><span class="unit">°C</span>
+                  </div>
+                  <span class="humidity"><span data-i18n="label_humidity">Humidity</span>: <span id="climate-humidity-secondary">46</span>%</span>
+                </div>
+                <div class="temp-controls">
+                  <button class="round-button temp-secondary" data-dir="-1">
+                    <i class="fa-solid fa-minus"></i>
+                  </button>
+                  <button class="round-button temp-secondary" data-dir="1">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="climate-switches">
+                <div class="switch-row">
+                  <span>Heater</span>
+                  <label class="switch">
+                    <input type="checkbox" id="heater-switch-secondary" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="switch-row">
+                  <span>AC</span>
+                  <label class="switch">
+                    <input type="checkbox" id="ac-switch-secondary" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card temperature-history">
+            <div class="card-header">
+              <h2 data-i18n="weekly_history_title">Weekly History</h2>
+            </div>
+            <div class="chart-container small">
+              <canvas id="temp-chart-secondary"></canvas>
+              <div class="chart-legend">
+                <span class="legend-dot"></span>
+                <span data-i18n="chart_home_temp">Home Temp</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECURITY SECTION -->
+      <section class="content-section" id="security-section">
+        <div class="section-header">
+          <h2 data-i18n="security_section_title">Security</h2>
+          <p data-i18n="security_section_subtitle">Monitor and control your smart security systems.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 data-i18n="security_controls_title">Security Controls</h2>
+          </div>
+          <div class="security-body">
+            <div class="security-grid">
+              <div class="security-item">
+                <span class="label">Front Door Lock</span>
+                <span class="value" id="front-door-status-secondary">Locked</span>
+                <label class="switch small">
+                  <input type="checkbox" id="front-door-toggle-secondary" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="security-item">
+                <span class="label">Garage Door</span>
+                <span class="value" id="garage-status-secondary">Closed</span>
+                <label class="switch small">
+                  <input type="checkbox" id="garage-toggle-secondary" />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="security-item">
+                <span class="label">Alarm System</span>
+                <span class="value status-pill armed" id="alarm-status-secondary">
+                  <span class="dot"></span> Armed
+                </span>
+                <div class="alarm-actions">
+                  <button class="chip-button primary" id="arm-alarm-secondary">Arm</button>
+                  <button class="chip-button" id="disarm-alarm-secondary">Disarm</button>
+                </div>
+              </div>
+              <div class="security-item">
+                <span class="label">Motion Detection</span>
+                <span class="value status-pill safe" id="motion-status-secondary">
+                  <span class="dot"></span> No Motion
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CAMERAS SECTION -->
+      <section class="content-section" id="cameras-section">
+        <div class="section-header">
+          <h2 data-i18n="cameras_section_title">Cameras</h2>
+          <p data-i18n="cameras_section_subtitle">View and manage all camera feeds.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 data-i18n="live_feeds_title">Live Feeds</h2>
+          </div>
+          <div class="camera-grid">
+            <!-- Reuse same structure as dashboard -->
+            <div class="camera-tile">
+              <div class="camera-header">
+                <span data-i18n="camera_front_door">Front Door</span>
+                <span class="camera-status live"><span class="dot"></span><span data-i18n="camera_live">Live</span></span>
+              </div>
+              <div class="camera-feed">
+                <div class="camera-overlay">Simulated Feed</div>
+              </div>
+            </div>
+            <div class="camera-tile">
+              <div class="camera-header">
+                <span data-i18n="camera_garage">Garage</span>
+                <span class="camera-status live"><span class="dot"></span><span data-i18n="camera_live">Live</span></span>
+              </div>
+              <div class="camera-feed alt">
+                <div class="camera-overlay">Simulated Feed</div>
+              </div>
+            </div>
+            <div class="camera-tile">
+              <div class="camera-header">
+                <span data-i18n="camera_backyard">Backyard</span>
+                <span class="camera-status live"><span class="dot"></span><span data-i18n="camera_live">Live</span></span>
+              </div>
+              <div class="camera-feed night">
+                <div class="camera-overlay">Simulated Feed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SENSORS SECTION -->
+      <section class="content-section" id="sensors-section">
+        <div class="section-header">
+          <h2 data-i18n="sensors_section_title">Sensors</h2>
+          <p data-i18n="sensors_section_subtitle">Overview of all smart sensors and alerts.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 data-i18n="sensors_status_title">Sensors & Status</h2>
+          </div>
+          <div class="sensor-list" id="sensors-section-list">
+            <!-- Cloned via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- AUTOMATION SECTION -->
+      <section class="content-section" id="automation-section">
+        <div class="section-header">
+          <h2 data-i18n="automation_section_title">Automation</h2>
+          <p data-i18n="automation_section_subtitle">Create and manage smart home automation scenarios.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 data-i18n="quick_modes_title">Quick Modes</h2>
+          </div>
+          <div class="automation-buttons">
+            <button class="automation-btn" data-mode="night">
+              <i class="fa-solid fa-moon"></i>
+              <div>
+                  <span data-i18n="mode_night">Night Mode</span>
+                  <small data-i18n="mode_night_desc">Dim lights, arm security</small>
+              </div>
+            </button>
+            <button class="automation-btn" data-mode="away">
+              <i class="fa-solid fa-person-walking-luggage"></i>
+              <div>
+                  <span data-i18n="mode_away">Away Mode</span>
+                  <small data-i18n="mode_away_desc">Turn off lights, set eco temp</small>
+              </div>
+            </button>
+            <button class="automation-btn" data-mode="vacation">
+              <i class="fa-solid fa-plane-departure"></i>
+              <div>
+                  <span data-i18n="mode_vacation">Vacation Mode</span>
+                  <small data-i18n="mode_vacation_desc">Random lights, max security</small>
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS SECTION -->
+      <section class="content-section" id="settings-section">
+        <div class="section-header">
+          <h2 data-i18n="settings_section_title">Settings</h2>
+          <p data-i18n="settings_section_subtitle">Configure devices, users, and connections.</p>
+        </div>
+        <div class="grid grid-three">
+          <div class="card">
+            <div class="card-header">
+              <h2 data-i18n="add_devices_title">Add Devices</h2>
+            </div>
+            <div class="settings-body">
+              <label class="field">
+                <span data-i18n="label_device_name">Device Name</span>
+                <input type="text" id="device-name" placeholder="Living Room Lamp" data-i18n-placeholder="placeholder_device_name" />
+              </label>
+              <label class="field">
+                <span data-i18n="label_device_type">Device Type</span>
+                <select id="device-type">
+                  <option data-i18n="device_type_light">Light</option>
+                  <option data-i18n="device_type_thermostat">Thermostat</option>
+                  <option data-i18n="device_type_camera">Camera</option>
+                  <option data-i18n="device_type_sensor">Sensor</option>
+                  <option data-i18n="device_type_other">Other</option>
+                </select>
+              </label>
+              <button class="primary-btn" id="add-device-btn">
+                <i class="fa-solid fa-plus"></i>
+                <span data-i18n="add_device_btn">Add Device</span>
+              </button>
+              <ul class="chips" id="device-list"></ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2 data-i18n="manage_users_title">Manage Users</h2>
+            </div>
+            <div class="settings-body">
+              <label class="field">
+                <span data-i18n="label_user_email">User Email</span>
+                <input type="email" id="user-email" placeholder="user@example.com" data-i18n-placeholder="placeholder_user_email" />
+              </label>
+              <label class="field">
+                <span data-i18n="label_user_role">Role</span>
+                <select id="user-role">
+                  <option data-i18n="role_admin">Admin</option>
+                  <option data-i18n="role_member">Member</option>
+                  <option data-i18n="role_guest">Guest</option>
+                </select>
+              </label>
+              <button class="primary-btn" id="add-user-btn">
+                <i class="fa-solid fa-user-plus"></i>
+                <span data-i18n="invite_user_btn">Invite User</span>
+              </button>
+              <ul class="chips" id="user-list">
+                <li class="chip">
+                  <span>alex@home.com</span>
+                  <small>Admin</small>
+                </li>
+                <li class="chip">
+                  <span>guest@home.com</span>
+                  <small>Guest</small>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2 data-i18n="camera_connections_title">Camera Connections</h2>
+            </div>
+            <div class="settings-body">
+              <label class="field">
+                <span data-i18n="label_camera_name">Camera Name</span>
+                <input type="text" id="camera-name" placeholder="Front Door" data-i18n-placeholder="placeholder_camera_name" />
+              </label>
+              <label class="field">
+                <span data-i18n="label_stream_url">Stream URL</span>
+                <input type="text" id="camera-url" placeholder="rtsp://192.168.1.10/stream" data-i18n-placeholder="placeholder_stream_url" />
+              </label>
+              <button class="primary-btn" id="connect-camera-btn">
+                <i class="fa-solid fa-link"></i>
+                <span data-i18n="connect_camera_btn">Connect Camera</span>
+              </button>
+              <ul class="chips" id="camera-list">
+                <li class="chip">
+                  <span>Front Door</span>
+                  <small>Connected</small>
+                </li>
+                <li class="chip">
+                  <span>Garage</span>
+                  <small>Connected</small>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
